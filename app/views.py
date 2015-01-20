@@ -40,7 +40,8 @@ def index():
 
     
     
-    for row in c.execute('SELECT rowid,* FROM torrents_small where rowid between ? and ?',(a,b)):        rowid = (row[0]%10)-1
+    for row in c.execute('SELECT rowid,* FROM torrents_small where rowid between ? and ?',(a,b)):
+        rowid = (row[0]%10)-1
         torrents[rowid]  = {'name': row[1],
                             'info_hash' :row[2],
                             'start' : a,
