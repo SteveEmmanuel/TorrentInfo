@@ -24,8 +24,6 @@ def index():
             a = int(value1[1])
             value2 = arg[2].split('=',2)
             b = int(value2[1])
-            print "before",a,b
-            print mode[0],' ------  ',mode[1]
             m = int(mode[1])
             if m == 0:#prev button
                 a = a-10
@@ -50,7 +48,6 @@ def index():
     if a == 0:
         a=10
         b=20
-        print a,b
         
     #print torrents
     return render_template("index.html",
