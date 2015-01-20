@@ -1,20 +1,30 @@
-from flask import render_template,request
+from flask import render_template,request,g
 from app import app
 from udp_scrape import create_connect_packet
 import sqlite3
+import os
 
+
+@app.before_request
+def before_request():
+    g.db = sqlite3.connect('database/torrents_small.db')
+
+@app.teardown_request
+def close_connection(exception):
+    db = getattr(g, 'db', None)
+    if db is not None:
+        db.close()
     
 @app.route('/',methods=['GET', 'POST'])
 @app.route('/index')
 def index():
-    conn = sqlite3.connect('database/torrents_small.db')
-    c = conn.cursor()
+    c = g.db.cursor()
     details = {}
     tracker = "tracker.openbittorrent.com"
     torrents = {}
     a=0
     b=10
-    print a,b
+    
     
     if request.args.get('submit') is not None:
             arg = request.args.get('submit').split('&',3)
