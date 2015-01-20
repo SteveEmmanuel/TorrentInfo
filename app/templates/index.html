@@ -1,0 +1,13 @@
+<html>
+<body>
+{% for a,torrent in torrents.items() %} 
+<a href="info?id={{torrent.info_hash}}" class = "a" name="a" id={{torrent.name}}>{{torrent.name}}</a><br>
+{% endfor %}
+<form action="/" method="get" name="post">
+<button type="submit" name="submit" value="req=0&start={{torrents.0.start}}&end={{torrents.0.end}}">prev</button>
+
+
+<button type="submit" name="submit" value="req=1&start={{torrents.0.start}}&end={{torrents.0.end}}">next</button>
+</form>
+</body>
+</html>

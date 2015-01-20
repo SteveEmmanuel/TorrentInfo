@@ -1,0 +1,15 @@
+<html>
+  <head>
+    {% if title %}
+    <title>{{ title }} - Torrent Information</title>
+    {% else %}
+    <title>Torrent Information</title>
+    {% endif %}
+  </head>
+  <body>
+      <h1>Torrent Info</h1>
+      Seeders:{{details.seeds}}<br>
+	 Leechers:{{details.leechers}}<br>
+	 Completed:{{details.completed}}<b>
+  </body>
+</html>
