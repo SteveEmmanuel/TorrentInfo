@@ -18,10 +18,6 @@ def index():
     
     if request.args.get('submit') is not None:
             arg = request.args.get('submit').split('&',3)
-            print "button"
-            #print request.args.get('submit')
-
-            print "req",arg[0],"start",arg[1],"end",arg[2]
 
             mode = arg[0].split('=',2)
             value1 = arg[1].split('=',2)
@@ -31,25 +27,20 @@ def index():
             print "before",a,b
             print mode[0],' ------  ',mode[1]
             m = int(mode[1])
-            if m == 0:
-                print " prev"
+            if m == 0:#prev button
                 a = a-10
                 b = b-10
                 if a < 0:
                     a = 0
                     b = 10
-            elif m == 1:
-                print " next"
+            elif m == 1:#next button
                 a = a+10
                 b = b+10
                     
-            print "finaalyyy",a,b
 
     
     
-    for row in c.execute('SELECT rowid,* FROM torrents_small where rowid between ? and ?',(a,b)):
-        print "database query" 
-        rowid = (row[0]%10)-1
+    for row in c.execute('SELECT rowid,* FROM torrents_small where rowid between ? and ?',(a,b)):        rowid = (row[0]%10)-1
         torrents[rowid]  = {'name': row[1],
                             'info_hash' :row[2],
                             'start' : a,
@@ -73,9 +64,7 @@ def index():
 @app.route('/info', methods=['GET', 'POST'])
 def click():
     if request.method == 'GET':
-        #print ("click"+request.args.get('id'))
         tracker = "tracker.openbittorrent.com"
-        print "qwery",request.args
         details = create_connect_packet(tracker, request.args.get('id'))
         return render_template('result.html', details= details)
 
