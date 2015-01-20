@@ -1,6 +1,6 @@
 from flask import render_template,request,g
 from app import app
-from udp_scrape import create_connect_packet
+from scrape_final import scrape
 import sqlite3
 import os
 
@@ -72,8 +72,9 @@ def index():
 @app.route('/info', methods=['GET', 'POST'])
 def click():
     if request.method == 'GET':
-        tracker = "tracker.openbittorrent.com"
-        details = create_connect_packet(tracker, request.args.get('id'))
+        #tracker = "udp://tracker.openbittorrent.com:80"
+        tracker = "http://bttracker.crunchbanglinux.org:6969/announce"
+        details = scrape(tracker, request.args.get('id'))
         return render_template('result.html', details= details)
 
 

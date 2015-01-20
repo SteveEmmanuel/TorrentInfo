@@ -3,10 +3,6 @@ import struct
 from random import randrange 
 from urllib import urlopen
 from urlparse import urlparse, urlunsplit
-import binascii,urllib
-import binascii, urllib, socket, random, struct
-from bcode import bdecode
-from urlparse import urlparse, urlunsplit
 
 
 
@@ -16,29 +12,18 @@ def scrape(tracker,info_hash):
     tracker = tracker.lower()
     parsed_tracker = urlparse(tracker)
     if parsed_tracker.scheme == "udp":
-	    return scrape_udp(parsed_tracker, info_hash)
+	    return scrape_udp(parsed_tracker ,info_hash)
 
-    if parsed_tracker.scheme in ["http", "https"]:		 
-	    return scrape_http(parsed_tracker, info_hash)
+    if parsed_tracker.scheme in ["http", "https"]:
+	    if "announce" not in tracker:
+		    raise RuntimeError("%s doesnt support scrape" % tracker)
+	    parsed_tracker = urlparse(tracker.replace("announce", "scrape"))		 
+	    return scrape_http(parsed_tracker, hashes)
 
-    raise RuntimeError("Unknown tracker scheme: %s" % parsed_tracker.scheme)
+    raise RuntimeError("Unknown tracker scheme: %s" % parsed.scheme)
 
 def scrape_http(parsed_tracker, info_hash):
-    tracker = "http://bttracker.crunchbanglinux.org:6969/announce "
-    print parsed_tracker
-    qs = []
-    url_param = binascii.a2b_hex(info_hash)
-    qs.append(("info_hash", url_param))
-    qs = urllib.urlencode(qs)
-    pt = parsed_tracker	
-    url = urlunsplit((pt.scheme, pt.netloc, pt.path, qs, pt.fragment))
-    handle = urllib.urlopen(url);
-    if handle.getcode() is not 200:
-	raise RuntimeError("%s status code returned" % handle.getcode())	
-    decoded = bdecode(handle.read())
-    print"---------------------------------------------------------------------"
-    print decoded
-    return {'seeds':decoded['incomplete'], 'leechers':decoded['downloaded'], 'completed':decoded['complete'] }
+    pass
 
 def scrape_udp(parsed_tracker, info_hash):
     connection_id = 0x41727101980
