@@ -3,8 +3,9 @@ from app import app
 from scrape_final import scrape
 import sqlite3
 import os
+from sqlalchemy import *
 
-
+"""
 @app.before_request
 def before_request():
     g.db = sqlite3.connect('database/torrents_small.db')
@@ -14,11 +15,17 @@ def close_connection(exception):
     db = getattr(g, 'db', None)
     if db is not None:
         db.close()
-    
+"""   
 @app.route('/',methods=['GET', 'POST'])
 @app.route('/index')
 def index():
+    """
     c = g.db.cursor()
+    """
+    engine = create_engine('sqlite:///database/torrents_small.db')
+    conn = engine.connect()
+    metadata = MetaData(engine)
+    t = Table('torrents_small', metadata, autoload=True)
     details = {}
     tracker = "tracker.openbittorrent.com"
     torrents = {}
@@ -47,7 +54,7 @@ def index():
                     
 
     
-    
+    """
     for row in c.execute('SELECT rowid,* FROM torrents_small where rowid between ? and ?',(a,b)):
         rowid = (row[0]%10)-1
         torrents[rowid]  = {'name': row[1],
@@ -55,6 +62,21 @@ def index():
                             'start' : a,
                             'end' : b
                            }
+   """
+    
+    s = select([t]).where(and_(t.c.row >= a,t.c.row <= b))
+    result = conn.execute(s)
+    for row in result:
+        print row
+        rowid = (row[0]%10)-1
+        torrents[rowid]  = {'name': row[1],
+                            'info_hash' :row[2],
+                            'start' : a,
+                            'end' : b
+                           }
+        
+    
+        
     if a == 0:
         a=10
         b=20

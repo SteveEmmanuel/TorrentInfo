@@ -24,7 +24,7 @@ def scrape(tracker,info_hash):
     raise RuntimeError("Unknown tracker scheme: %s" % parsed_tracker.scheme)
 
 def scrape_http(parsed_tracker, info_hash):
-    tracker = "http://bttracker.crunchbanglinux.org:6969/announce "
+    tracker = "http://bitflip.dynalias.net:8990/announce"
     print parsed_tracker
     qs = []
     url_param = binascii.a2b_hex(info_hash)
