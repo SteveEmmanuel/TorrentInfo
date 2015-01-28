@@ -1,12 +1,9 @@
-import socket
-import struct
-from random import randrange 
-from urllib import urlopen
 from urlparse import urlparse, urlunsplit
-import binascii,urllib
-import binascii, urllib, socket, random, struct
+from random import randrange
+import binascii, urllib, socket, struct
 from bcode import bdecode
-from urlparse import urlparse, urlunsplit
+
+
 
 
 
@@ -24,8 +21,7 @@ def scrape(tracker,info_hash):
     raise RuntimeError("Unknown tracker scheme: %s" % parsed_tracker.scheme)
 
 def scrape_http(parsed_tracker, info_hash):
-    tracker = "http://bitflip.dynalias.net:8990/announce"
-    print parsed_tracker
+    #print parsed_tracker
     qs = []
     url_param = binascii.a2b_hex(info_hash)
     qs.append(("info_hash", url_param))
@@ -36,8 +32,8 @@ def scrape_http(parsed_tracker, info_hash):
     if handle.getcode() is not 200:
 	raise RuntimeError("%s status code returned" % handle.getcode())	
     decoded = bdecode(handle.read())
-    print"---------------------------------------------------------------------"
-    print decoded
+    #print"---------------------------------------------------------------------"
+    #print decoded
     return {'seeds':decoded['incomplete'], 'leechers':decoded['downloaded'], 'completed':decoded['complete'] }
 
 def scrape_udp(parsed_tracker, info_hash):

@@ -1,11 +1,14 @@
-from flask import render_template,request,g
-from app import app
-from scrape_final import scrape
-import sqlite3
 import os
+from flask import Flask
+from flask import render_template
+from flask import request
+from scrape_final import scrape
 from sqlalchemy import *
 
-"""
+app = Flask(__name__)
+
+
+ """
 @app.before_request
 def before_request():
     g.db = sqlite3.connect('database/torrents_small.db')
@@ -15,14 +18,16 @@ def close_connection(exception):
     db = getattr(g, 'db', None)
     if db is not None:
         db.close()
-"""   
+"""
+
+ 
 @app.route('/',methods=['GET', 'POST'])
 @app.route('/index')
 def index():
     """
     c = g.db.cursor()
     """
-    engine = create_engine('sqlite:///database/torrents_small.db')
+    engine = create_engine(os.path.join(os.environ["OPENSHIFT_MYSQL_DB_URL"], 'tinfo'))
     conn = engine.connect()
     metadata = MetaData(engine)
     t = Table('torrents_small', metadata, autoload=True)
@@ -86,7 +91,8 @@ def index():
                            title='TorrentsInfoLeecher',
                            torrents=torrents)        
                 
-                
+    if __name__ == "__main__":
+    app.run(debug = "True")            
                 
                 
        
